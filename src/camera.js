@@ -325,20 +325,33 @@
 				|| data.old.classes != entity._classString,
 			transform = '';
 		
-		
-		if (typeof map.z != 'undefined') {
-			if (!Crafty.support.css3dtransform) {
-				throw 'Your browser does not support 3D properties. Please upgrade to a more recent browser.';
-			}
-			else {
-				transform = 'translate3d('+entity.x+'px, '+entity.y+'px, '+entity.z+'px) rotateZ('+entity.rotation+'deg)';
-			}
-		}
-		else {
-			transform = 'translate('+entity[map.x]+'px,'+entity[map.y]+'px) rotate('+entity.rotation+'deg)';
+		if (typeof map == 'undefined') {
+			map = this._map;
 		}
 			
 		if (dirty) {
+			var values = {
+				x: entity[map.x],
+				y: entity[map.y],
+				z: typeof map.z == 'undefined'?entity.z:entity[map.z]
+			};
+			
+			if (typeof this._modifyValues == 'function') {
+				values = this._modifyValues(values);
+			}
+			
+			if (typeof map.z != 'undefined') {
+				if (!Crafty.support.css3dtransform) {
+					throw 'Your browser does not support 3D properties. Please upgrade to a more recent browser.';
+				}
+				else {
+					transform = 'translate3d('+values.x+'px, '+values.y+'px, '+values.z+'px) rotateZ('+entity.rotation+'deg)';
+				}
+			}
+			else {
+				transform = 'translate('+values.x+'px,'+values.y+'px) rotate('+entity.rotation+'deg)';
+			}
+
 			// double check, since changing classes is most expensive operation here
 			if (elem.className != entity._classString) {
 				elem.className = entity._classString;
@@ -352,13 +365,14 @@
 			data.old.z = entity.z;
 			data.old.rotation = entity.rotation;
 			data.old.classes = entity._classString;
+		
 		}
 	}
 	
 	/**
 	 * Camera modes
 	 * Defines a rendering method and any helper functions for that camera mode
-	 * Every camera mode must have a render method.
+	 * Every camera mode must have a _render method.
 	 * Additional methods, specific to that camera mode, can be added.
 	 * For instance, Full3D could have an orbit method that would be useless to TopDown
 	 *
@@ -378,6 +392,10 @@
 	 * Only renders the top face of each box
 	 */
 	Crafty.camera.modes.topdown = {
+		_map: {
+			x: 'x', 
+			y: 'y'
+		},
 		_zoom: 1.0,
 		zoom: function(amt) {
 			if (typeof amt == 'number') {
@@ -406,7 +424,7 @@
 				this.changed = false;
 			}
 			for (var e in data) {
-				entity_render.call(this, e, data[e], {x: 'x', y: 'y'});
+				entity_render.call(this, e, data[e]);
 				
 				var top = data[e].faces.top;
 				top.render();
@@ -421,6 +439,10 @@
 	Crafty.camera.modes.sideview = {
 		_zoom: 1.0,
 		zoom: Crafty.camera.modes.topdown.zoom,
+		_map: {
+			x: 'y', 
+			y: 'z'
+		},
 		_render: function (data) {
 			if (this.changed) {
 				for (var i in this.layers) {
@@ -436,7 +458,7 @@
 			}
 			
 			for (var e in data) {
-				entity_render.call(this, e, data[e], {x: 'y', y: 'z'});
+				entity_render.call(this, e, data[e]);
 				
 				var face = data[e].faces.right;
 				face.render();
@@ -450,6 +472,10 @@
 	 */
 	Crafty.camera.modes.isometric = {
 		_zoom: 1.0,
+		_map: {
+			x: 'x', 
+			y: 'y'
+		},
 		zoom: Crafty.camera.modes.topdown.zoom,
 		lookAt: function (x, y, z) {
 			if (typeof x == 'object' && x) {
@@ -467,16 +493,16 @@
 				// adjust them to world coordinates
 				var iso = Crafty.isometric._tile;
 				this.target = {
-					x: iso.width, 
-					y: iso.length, 
-					z: iso.height
+					x: iso.width * x, 
+					y: iso.length * y, 
+					z: iso.height * z
 				};
 			}
 			this.changed = true;
 			
 			return this;
 		},
-		rotation: 0,
+		rotation: 135,
 		rotate: function (dir) {
 			if (typeof dir == "number") {
 				dir = dir/Math.abs(dir);
@@ -498,7 +524,42 @@
 			
 			return this;
 		},
+		_modifyValues: function (values) {
+			var s = Math.sin(this.rotation),
+				c = Math.cos(this.rotation);
+			
+			values.x -= this.target.x;
+			values.y -= this.target.y;
+			
+			values.x = values.x * c - values.y * s + this.target.x;
+			values.y = values.x * s + values.y * c + this.target.y;
+			
+			values.y *= 0.50;
+			
+			return values;
+		},
 		_render: function (data) {
+			// move layers to the center point
+			if (this.changed) {
+				for (var i in this.layers) {
+					var l = this.layers[i],
+						dom = this.dom.querySelector('#camera-'+this.label+'-'+i);
+					l.x += this.target.x*l.ratio;
+					l.y += this.target.y*l.ratio;
+
+					dom.style.transform = dom.style[Crafty.support.prefix+'Transform'] = 'translate('+(-1*l.x)+'px, '+(-1*l.y)+'px) scale('+(this._zoom*l.ratio)+', '+(this._zoom*l.ratio)+')';
+				}
+				this.move(0, 0, 0, true);
+				this.changed = false;
+			}
+			
+			for (var e in data) {
+				entity_render.call(this, e, data[e]);
+				
+				// set z-indexes
+				// calculate which elem should be on top based on camera rotation, x, and y, then handle z
+			}
+		
 			return this;
 		}
 	}
@@ -511,8 +572,13 @@
 		_zoom: 1.0,
 		zoom: Crafty.camera.modes.topdown.zoom,
 		lookAt: Crafty.camera.modes.isometric.lookAt,
-		rotation: 0,
+		rotation: 135,
 		rotate: Crafty.camera.modes.isometric.rotate,
+		_map: {
+			x: 'x', 
+			y: 'y', 
+			z: 'z'
+		},
 		getTransforms: function() {
 			var vector = {
 				// common thought is that 'down' is the bottom right of an isometric system
@@ -598,7 +664,7 @@
 			
 			// redraw entities
 			for (var e in data) {
-				entity_render.call(this, e, data[e], {x: 'x', y: 'y', z: 'z'});
+				entity_render.call(this, e, data[e]);
 				
 				for (var i in data[e].faces) {
 					data[e].faces[i].render();
@@ -611,6 +677,11 @@
 	 * Renders all 6 faces. Camera can be anywhere. Has perspective.
 	 */
 	Crafty.camera.modes.dom3d = {
+		_map: {
+			x: 'x', 
+			y: 'y', 
+			z: 'z'
+		},
 		lookAt: function (x, y, z) {
 			if (typeof x == 'object' && x) {
 				y = x.y;
@@ -669,7 +740,7 @@
 			
 			// redraw entities
 			for (var e in data) {
-				entity_render.call(this, e, data[e], {x: 'x', y: 'y', z: 'z'});
+				entity_render.call(this, e, data[e]);
 				
 				for (var i in data[e].faces) {
 					data[e].faces[i].render();
