@@ -520,6 +520,7 @@
 					this.rotation = 0;
 				break;
 			}
+			this.rotation %= 360;
 			this.changed = true;
 			
 			return this;
@@ -592,14 +593,14 @@
 			trans = {}, hyp;
 			
 			switch (this.rotation) {
-				case 90:
+				case 225:
 					vector.x *= -1;
 				break;
-				case 180: 
+				case 315: 
 					vector.x *= -1;
 					vector.y *= -1;
 				break;
-				case 270:
+				case 45:
 					vector.y *= -1;
 			}
 			
@@ -616,7 +617,7 @@
 			trans.form.push({op: 'rotateX', val:[60]});
 			
 			// figure out the z rotation
-			trans.form.push({op: 'rotateZ', val:[135 + this.rotation]});
+			trans.form.push({op: 'rotateZ', val:[this.rotation]});
 			
 			return trans;
 		},
