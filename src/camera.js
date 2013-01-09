@@ -290,25 +290,6 @@
 	};
 	Crafty.camera.fn.init.prototype = Crafty.camera.fn;
 	
-	function isComponentListChanged(oldComponents, newComponents) {
-		var changes = false;
-		for (var oldComponent in oldComponents) {
-			if (!(oldComponent in newComponents)) {
-				changes = true;
-				break;
-			}
-		}
-		if (!changes) {
-			for (var newComponent in newComponents) {
-				if (!(newComponent in oldComponents)) {
-					changes = true;
-					break;
-				}
-			}
-		}
-		return changes;
-	}
-	
 	/**
 	 * @param e_id  Unique entity id (should be integer as string)
 	 * @param data  The rendering data for the entity only
@@ -559,6 +540,17 @@
 				
 				// set z-indexes
 				// calculate which elem should be on top based on camera rotation, x, and y, then handle z
+				// var z-index = 0;
+				// switch (this.rotation) {
+					// case 135:
+					// break;
+					// case 225:
+					// break;
+					// case 315:
+					// break;
+					// case 45:
+					// break;
+				// }
 			}
 		
 			return this;
@@ -610,6 +602,8 @@
 			trans.origin.z = this.target.z;
 			trans.form = [];
 			trans.form.push({op: 'translate3d', val:[(-1*this.target.x), (-1*this.target.y), (-1*this.target.z)]});
+			trans.form.push({op: 'scaleX', val:[-1]});
+			trans.form.push({op: 'scale3d', val:[this._zoom, this._zoom, this._zoom]});
 			
 			// figure out the x rotation based on the rotation
 			// its always 30 degrees
@@ -710,7 +704,9 @@
 			trans.origin.z = this.target.z;
 			trans.form = [];
 			trans.form.push({op: 'translateZ', val: [1000]});	// move the browser's viewpoint to 0,0,0
+			trans.form.push({op: 'scaleX', val: [-1]});
 			trans.form.push({op: 'translate3d', val:[(-1*this.target.x), (-1*this.target.y), (-1*this.target.z)]});
+			trans.form.push({op: 'scale3d', val: [this.zoom, this.zoom, this.zoom]});
 			
 			// figure out the x rotation based on the vector
 			hyp = Math.sqrt(vector.x*vector.x + vector.y*vector.y + vector.z*vector.z);
