@@ -17,6 +17,7 @@ Crafty.camera.modes.canvas3d = {
 		
 		var faces = [];
 		
+		// collect list of all faces to render
 		for (var e in data) {
 			for (var i in data[e].faces) {
 				// backface filtering:
@@ -26,12 +27,23 @@ Crafty.camera.modes.canvas3d = {
 				var face = data[e].faces[i],
 					camera_v = Vector.from_to(camera, get_center(face, data[e].entity)),
 					face_v = get_normal(face, data[e].entity);
+				
+				face.distance = camera_v.length();
 					
 				if (camera_v.dot(face_v) < 0) {
-					faces.push(data[e].faces[i]);
+					faces.push(face);
 				}
 			}
 		}
+		
+		// sort by distance from camera
+		faces.sort(function (a, b) {
+			if (a.distance < b.distance)
+				return -1;
+			else if (a.distance > b.distance)
+				return 1;
+			return 0;
+		});
 	}
 };
 
