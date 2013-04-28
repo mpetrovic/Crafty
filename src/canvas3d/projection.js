@@ -6,14 +6,14 @@ function Projection(camera, target) {
 Projection.prototype = {
 	set: function (camera, target) {
 		this.c_vect = new Vector(camera.x, camera.y, camera.z);
-		this.t_vect = new Vector(target.x, target.y, target.z);
 		
-		var d_vect = t_vect.sub(c_vect),
+		var t_vect = new Vector(target.x, target.y, target.z),
+			d_vect = t_vect.sub(this.c_vect),
 			hyp = Math.sqrt(d_vect.x*d_vect.x + d_vect.y*d_vect.y + d_vect.z*d_vect.z),
 			ang = {
-				x: Crafty.math.radToDeg(Math.asin(vector.z/hyp)),
+				x: Math.asin(d_vect.z/hyp),
 				y: 0,
-				z: Crafty.math.radToDeg(Math.atan2(-vector.x, -vector.y))
+				z: Math.atan2(-d_vect.x, -d_vect.y)
 			};
 		
 		this.ang = ang;
@@ -21,10 +21,10 @@ Projection.prototype = {
 	
 	// taken from http://en.wikipedia.org/wiki/3D_projection#Perspective_projection
 	// translates a 3d vertex into a 2d vertex
-	transform: function (vertex) {
+	transform: function (vector) {
 		var cos = Math.cos, sin = Math.sin,
-			t_vect = new Vector(target.x, target.y, target.z),
-			d_vect = t_vect.sub(c_vect),
+			t_vect = new Vector(vector.x, vector.y, vector.z),
+			d_vect = t_vect.sub(this.c_vect),
 			ang = this.ang,
 			d_vex = {
 				x: cos(ang.y) * (sin(ang.z) * d_vect.y + cos(ang.z) * d_vect.x) - sin(ang.y) * d_vect.z,
@@ -36,5 +36,55 @@ Projection.prototype = {
 	},
 	
 	transformFace: function (face, entity) {
+		var points = [];
+		
+		switch (face.facing) {
+			case 'front':
+				points.push(new Vector(entity.x, entity.y, entity.z));
+				points.push(new Vector(entity.x, entity.y, entity.z+entity.h));
+				points.push(new Vector(entity.x+entity.w, entity.y, entity.z+entity.h));
+				points.push(new Vector(entity.x+entity.w, entity.y, entity.z));
+				break;
+			case 'left':
+				points.push(new Vector(entity.x+entity.w, entity.y, entity.z));
+				points.push(new Vector(entity.x+entity.w, entity.y, entity.z+entity.h));
+				points.push(new Vector(entity.x+entity.w, entity.y+entity.l, entity.z+entity.h));
+				points.push(new Vector(entity.x+entity.w, entity.y+entity.l, entity.z));
+				break;
+			case 'right':
+				points.push(new Vector(entity.x, entity.y, entity.z));
+				points.push(new Vector(entity.x, entity.y, entity.z+entity.h));
+				points.push(new Vector(entity.x, entity.y+entity.l, entity.z+entity.h));
+				points.push(new Vector(entity.x, entity.y+entity.l, entity.z));
+				break;
+			case 'back':
+				points.push(new Vector(entity.x, entity.y+entity.l, entity.z));
+				points.push(new Vector(entity.x, entity.y+entity.l, entity.z+entity.h));
+				points.push(new Vector(entity.x+entity.w, entity.y+entity.l, entity.z+entity.h));
+				points.push(new Vector(entity.x+entity.w, entity.y+entity.l, entity.z));
+				break;
+			case 'top':
+				points.push(new Vector(entity.x, entity.y, entity.z+entity.h));
+				points.push(new Vector(entity.x+entity.w, entity.y, entity.z+entity.h));
+				points.push(new Vector(entity.x+entity.w, entity.y+entity.l, entity.z+entity.h));
+				points.push(new Vector(entity.x, entity.y+entity.l, entity.z+entity.h));
+				break;
+			case 'below':
+				points.push(new Vector(entity.x, entity.y, entity.z));
+				points.push(new Vector(entity.x+entity.w, entity.y, entity.z));
+				points.push(new Vector(entity.x+entity.w, entity.y+entity.l, entity.z));
+				points.push(new Vector(entity.x, entity.y+entity.l, entity.z));
+				break;
+			
+		}
+		
+		var poly = new Polygon();
+		for (var i = 0; i < points.length; i++) {
+			var vert = this.transform(points[i]);
+			poly.add(vert);
+		}
+		poly.fill(face.paint['background-color']);
+		
+		return poly;
 	}
 };

@@ -29,6 +29,7 @@ Crafty.camera.modes.canvas3d = {
 					face_v = get_normal(face, data[e].entity);
 				
 				face.distance = camera_v.length();
+				face.entity = data[e].entity;
 				
 				if (camera_v.dot(face_v) < 0) {
 					faces.push(face);
@@ -44,6 +45,13 @@ Crafty.camera.modes.canvas3d = {
 				return 1;
 			return 0;
 		});
+		
+		var polys = [],
+			proj = new Projection(this, this.target);
+		for (var i = 0; i < faces.length; i++) {
+			polys.push(proj.transformFace(faces[i], faces[i].entity));
+		}
+		console.log(polys);
 	}
 };
 

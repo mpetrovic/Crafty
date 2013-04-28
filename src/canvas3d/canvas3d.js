@@ -25,6 +25,7 @@
 		'intro',
 		'vertex',
 		'vector',
+		'polygon',
 		'projection',
 		'execute',
 		'outro'
