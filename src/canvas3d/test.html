@@ -4,6 +4,16 @@
 	<title>3D Canvas Test Suite</title>
 	<script type="text/javascript" src="../../crafty-local.js"></script>
 	<script type="text/javascript" src="canvas3d.js"></script>
+	<script type="text/javascript">
+		window.onload = function () {
+			Crafty.init();
+			Crafty.camera.cameras['default'].active = false;
+			Crafty.camera('canvas3d', 'canvas3d', {canvas: true});
+			Crafty.camera.cameras['canvas3d'].move(300, 300, 300);
+			
+			var ent1 = Crafty.e('Spatial, Color').attr({w: 100, l: 100, h: 100}).color('red');
+		}
+	</script>
 </head>
 <body>
 </body>

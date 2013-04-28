@@ -245,14 +245,23 @@
 						old: {},
 						entity: e
 					};
+				
+				if (this.changed) {
+					this.x += this.diff.x;
+					this.y += this.diff.y;
+					this.z += this.diff.z;
+					this.diff = {x: 0, y: 0, z: 0};
+				}
 
 				// some things to run the first time the data is built
 				if (!this.data[e[0]]) {
 					this.data[e[0]] = d;
-					elem.id = 'entity-'+e[0];
-					elem.setAttribute('data-entity-id', e[0]);
-					elem.style.position = 'absolute';
-					this.dom.querySelector('#camera-'+this.label+'-'+e.layer).appendChild(elem);
+					if (this.dom) {
+						elem.id = 'entity-'+e[0];
+						elem.setAttribute('data-entity-id', e[0]);
+						elem.style.position = 'absolute';
+						this.dom.querySelector('#camera-'+this.label+'-'+e.layer).appendChild(elem);
+					}
 				}
 				else {
 					delete toDelete[e[0]];

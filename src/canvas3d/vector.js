@@ -18,11 +18,11 @@ Vector.prototype = {
 	sub: function (v) {
 		if (!(v instanceof Vector)) throw 'Exception: Invalid argument';
 		
-		return new Vertex(this.x - v.x, this.y - v.y, this.z - v.z);
+		return new Vector(this.x - v.x, this.y - v.y, this.z - v.z);
 	},
 	
 	length: function() {
-		return Math.sqrt(this.x*this.x, this.y*this.y, this.z*this.z);
+		return Math.sqrt(this.x*this.x + this.y*this.y + this.z*this.z);
 	},
 	
 	dot: function (v) { 
