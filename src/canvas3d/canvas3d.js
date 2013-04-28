@@ -25,13 +25,14 @@
 		'intro',
 		'vertex',
 		'vector',
+		'projection',
 		'execute',
 		'outro'
 	],
 	l = include.length, i, tr = new XMLHttpRequest(), output = '', url, base = '', scripts = document.getElementsByTagName('script');
 	for (i=0; i<scripts.length; i++) {
 		if (scripts[i].src.indexOf('canvas3d.js') != -1) {
-			base = scripts[i].src.replace('canvas3d.js', '')+'/src/';
+			base = scripts[i].src.replace('canvas3d.js', '');
 			break;
 		}
 	}	
@@ -43,6 +44,7 @@
 			tr.send(null);
 		}
 		catch (e) {
+			console.log(e);
 			alert("Your security settings prevent access to the local file-system. \n\r Access to restricted URI denied code 1012");
 			break;
 		}
