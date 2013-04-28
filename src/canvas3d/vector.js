@@ -17,6 +17,8 @@ Vector.prototype = {
 	
 	sub: function (v) {
 		if (!(v instanceof Vector)) throw 'Exception: Invalid argument';
+		
+		return new Vertex(this.x - v.x, this.y - v.y, this.z - v.z);
 	},
 	
 	length: function() {
@@ -30,7 +32,7 @@ Vector.prototype = {
 	}
 };
 
-Vector.create_from_to(from, to) {
+Vector.create_from_to = function (from, to) {
 	if (!('x' in from) || !('x' in to)) throw 'Exception: Invalid argument';
 	
 	var x = to.x - from.x,
