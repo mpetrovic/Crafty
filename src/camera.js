@@ -110,8 +110,8 @@
 			if ("canvas" in options && options.canvas) {
 				this.canvas = document.createElement('canvas');
 				this.canvas.id = 'camera_'+label;
-				this.canvas.width = options.width;
-				this.canvas.height = options.height;
+				this.canvas.width = options.width || Crafty.viewport.width;
+				this.canvas.height = options.height || Crafty.viewport.height;
 				Crafty.stage.elem.appendChild(this.canvas);
 			} 
 			else {
