@@ -11,12 +11,13 @@ Projection.prototype = {
 			d_vect = t_vect.sub(this.c_vect),
 			hyp = Math.sqrt(d_vect.x*d_vect.x + d_vect.y*d_vect.y + d_vect.z*d_vect.z),
 			ang = {
-				x: Math.asin(d_vect.z/hyp),
-				y: 0,
-				z: Math.atan2(-d_vect.x, -d_vect.y)
+				x: 0,
+				y: (Math.atan2(d_vect.y, -d_vect.x)),
+				z: (Math.asin(d_vect.z/hyp))
 			};
 		
 		this.ang = ang;
+		console.log(this.ang);
 	},
 	
 	// taken from http://en.wikipedia.org/wiki/3D_projection#Perspective_projection

@@ -27,6 +27,7 @@
 		'vector',
 		'polygon',
 		'projection',
+		'painter',
 		'execute',
 		'outro'
 	],

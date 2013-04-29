@@ -15,7 +15,8 @@ Crafty.camera.modes.canvas3d = {
 	},
 	_render: function (data) {
 		
-		var faces = [];
+		var faces = [],
+			changed = this.changed;
 		
 		// collect list of all faces to render
 		for (var e in data) {
@@ -28,6 +29,8 @@ Crafty.camera.modes.canvas3d = {
 					camera_v = Vector.create_from_to(this, get_center(face, data[e].entity)),
 					face_v = get_normal(face, data[e].entity);
 				
+				changed = face.dirty || changed;
+				
 				face.distance = camera_v.length();
 				face.entity = data[e].entity;
 				
@@ -36,6 +39,8 @@ Crafty.camera.modes.canvas3d = {
 				}
 			}
 		}
+		
+		if (!this.changed) return;
 		
 		// sort by distance from camera
 		faces.sort(function (a, b) {
@@ -52,6 +57,9 @@ Crafty.camera.modes.canvas3d = {
 			polys.push(proj.transformFace(faces[i], faces[i].entity));
 		}
 		console.log(polys);
+		
+		var painter = new Painter(this);
+		painter.render(polys);
 	}
 };
 
