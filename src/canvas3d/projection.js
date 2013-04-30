@@ -13,7 +13,7 @@ Projection.prototype = {
 			ang = {
 				x: 0,
 				y: (Math.atan2(d_vect.y, -d_vect.x)),
-				z: (Math.asin(d_vect.z/hyp))
+				z: (Math.acos(d_vect.z/hyp))
 			};
 		
 		this.ang = ang;
@@ -32,6 +32,7 @@ Projection.prototype = {
 				y: sin(ang.x) * (cos(ang.y) * d_vect.z + sin(ang.y) * (sin(ang.z) * d_vect.y + cos(ang.z) * d_vect.x)) + cos(ang.x) * (cos(ang.z) * d_vect.y - sin(ang.z) * d_vect.x),
 				z: cos(ang.x) * (cos(ang.y) * d_vect.z + sin(ang.y) * (sin(ang.z) * d_vect.y + cos(ang.z) * d_vect.x)) - sin(ang.x) * (cos(ang.z) * d_vect.y - sin(ang.z) * d_vect.x)
 			};
+			console.log(d_vex);
 			
 		return new Vertex(d_vex.x, d_vex.y);
 	},

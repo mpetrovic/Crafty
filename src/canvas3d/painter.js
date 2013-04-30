@@ -13,7 +13,7 @@ Painter.prototype = {
 			verts, first,
 			off = {
 				x: Crafty.viewport.width/2,
-				y: Crafty.viewport.height/2
+				y: 0 //Crafty.viewport.height/2
 			};
 		
 		polys = polys.reverse();
@@ -26,6 +26,7 @@ Painter.prototype = {
 			this.ctx.moveTo(first.x+off.x, first.y+off.y);
 			for (j=0; j<verts.length; j++) {
 				this.ctx.lineTo(verts[j].x+off.x, verts[j].y+off.y);
+				this.ctx.stroke();
 			}
 			this.ctx.fillStyle = polys[i].fill();
 			this.ctx.fill();
