@@ -11,13 +11,13 @@ Projection.prototype = {
 			d_vect = t_vect.sub(this.c_vect),
 			hyp = Math.sqrt(d_vect.x*d_vect.x + d_vect.y*d_vect.y + d_vect.z*d_vect.z),
 			ang = {
-				x: 0,
-				y: (Math.atan2(d_vect.y, -d_vect.x)),
-				z: (Math.acos(d_vect.z/hyp))
+				x: (Math.acos(d_vect.z/hyp)),
+				y: 0,
+				z: (Math.atan2(d_vect.y, -d_vect.x))
 			};
 		
 		this.ang = ang;
-		console.log(this.ang);
+		console.log({x: Crafty.math.radToDeg(ang.x), z: Crafty.math.radToDeg(ang.z)});
 	},
 	
 	// taken from http://en.wikipedia.org/wiki/3D_projection#Perspective_projection
@@ -34,7 +34,7 @@ Projection.prototype = {
 			};
 			console.log(d_vex);
 			
-		return new Vertex(d_vex.x, d_vex.y);
+		return new Vertex(d_vex.x >> 0, d_vex.y >> 0);
 	},
 	
 	transformFace: function (face, entity) {
@@ -86,6 +86,7 @@ Projection.prototype = {
 			poly.add(vert);
 		}
 		poly.fill(face.paint['background-color']);
+		poly.facing = face.facing;
 		
 		return poly;
 	}

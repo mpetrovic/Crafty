@@ -67,31 +67,33 @@ function get_center(face, entity) {
 	var angle = entity.rotation,
 		offset = 0,
 		cent = {
-			x: entity.x + entity.w/2,
-			y: entity.y + entity.l/2
+			x: entity.x + entity.l/2,
+			y: entity.y + entity.w/2
 		},
 		p = {
-			x: entity.y,
-			y: entity.w/2
+			x: -entity.w/2,
+			y: 0
 		};
 	
 	switch (face.facing) {
 		case 'front': 
-			offset = 0;
+			offset = 270;
 			break;
 		case 'left':
-			offset = -90;
+			offset = 180;
 			break;
 		case 'right':
-			offset = 90;
+			offset = 0;
 			break;
 		case 'back':
-			offset = 180;
+			offset = 90;
 			break;
 		case 'top':
 			return new Vector(cent.x, cent.y, entity.z+entity.h);
+			break;
 		case 'below':
 			return new Vector(cent.x, cent.y, entity.z);
+			break;
 	}
 	
 	var s = Math.sin(Crafty.math.degToRad(angle+offset)),
@@ -99,7 +101,7 @@ function get_center(face, entity) {
 	
 	return new Vector((p.x * c - p.y * s + cent.x) >> 0,
 		(p.x * s + p.y * c + cent.y) >> 0,
-		face.z
+		entity.z+face.z
 	);
 }
 
@@ -110,7 +112,8 @@ function get_center(face, entity) {
  */
 function get_normal(face, entity) {
 	var f_cent = get_center(face, entity),
-		e_cent = new Vector(entity.x + entity.w/2, entity.y + entity.l/2, entity.z+(entity.h/2));
+		e_cent = new Vector(entity.x + entity.l/2, entity.y + entity.w/2, entity.z+(entity.h/2));
 		
 	return f_cent.sub(e_cent);
 }
+

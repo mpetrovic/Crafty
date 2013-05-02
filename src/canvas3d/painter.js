@@ -13,7 +13,7 @@ Painter.prototype = {
 			verts, first,
 			off = {
 				x: Crafty.viewport.width/2,
-				y: 0 //Crafty.viewport.height/2
+				y: Crafty.viewport.height/2
 			};
 		
 		polys = polys.reverse();
