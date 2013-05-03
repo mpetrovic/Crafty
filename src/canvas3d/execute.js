@@ -56,7 +56,6 @@ Crafty.camera.modes.canvas3d = {
 		for (var i = 0; i < faces.length; i++) {
 			polys.push(proj.transformFace(faces[i], faces[i].entity));
 		}
-		console.log(polys);
 		
 		var painter = new Painter(this);
 		painter.render(polys);

@@ -17,7 +17,6 @@ Projection.prototype = {
 			};
 		
 		this.ang = ang;
-		console.log({x: Crafty.math.radToDeg(ang.x), z: Crafty.math.radToDeg(ang.z)});
 	},
 	
 	// taken from http://en.wikipedia.org/wiki/3D_projection#Perspective_projection
@@ -35,7 +34,7 @@ Projection.prototype = {
 			r_dim = {
 				x: Crafty.viewport.width,
 				y: Crafty.viewport.height,
-				z: Crafty.viewport.width/4 + Crafty.viewport.height/3
+				z: Crafty.viewport.width/4 + Crafty.viewport.height/4
 			},
 			r_vex = {
 				x: d_vex.x * (r_dim.z / d_vex.z),
