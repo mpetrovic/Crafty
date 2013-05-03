@@ -31,10 +31,18 @@ Projection.prototype = {
 				x: cos(ang.y) * (sin(ang.z) * d_vect.y + cos(ang.z) * d_vect.x) - sin(ang.y) * d_vect.z,
 				y: sin(ang.x) * (cos(ang.y) * d_vect.z + sin(ang.y) * (sin(ang.z) * d_vect.y + cos(ang.z) * d_vect.x)) + cos(ang.x) * (cos(ang.z) * d_vect.y - sin(ang.z) * d_vect.x),
 				z: cos(ang.x) * (cos(ang.y) * d_vect.z + sin(ang.y) * (sin(ang.z) * d_vect.y + cos(ang.z) * d_vect.x)) - sin(ang.x) * (cos(ang.z) * d_vect.y - sin(ang.z) * d_vect.x)
+			},
+			r_dim = {
+				x: Crafty.viewport.width,
+				y: Crafty.viewport.height,
+				z: Crafty.viewport.width/4 + Crafty.viewport.height/3
+			},
+			r_vex = {
+				x: d_vex.x * (r_dim.z / d_vex.z),
+				y: d_vex.y * (r_dim.z / d_vex.z)
 			};
-			console.log(d_vex);
 			
-		return new Vertex(d_vex.x >> 0, d_vex.y >> 0);
+		return new Vertex(r_vex.x >> 0, r_vex.y >> 0);
 	},
 	
 	transformFace: function (face, entity) {
