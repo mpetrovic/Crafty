@@ -15,6 +15,8 @@ Painter.prototype = {
 				x: Crafty.viewport.width/2,
 				y: Crafty.viewport.height/2
 			};
+			
+		this.ctx.clearRect(0, 0, Crafty.viewport.width, Crafty.viewport.height);
 		
 		polys = polys.reverse();
 		
@@ -23,9 +25,9 @@ Painter.prototype = {
 			first = verts.shift();
 			
 			this.ctx.beginPath();
-			this.ctx.moveTo(first.x+off.x, first.y+off.y);
+			this.ctx.moveTo(first.x+off.x, -first.y+off.y);
 			for (j=0; j<verts.length; j++) {
-				this.ctx.lineTo(verts[j].x+off.x, verts[j].y+off.y);
+				this.ctx.lineTo(verts[j].x+off.x, -verts[j].y+off.y);
 				this.ctx.stroke();
 			}
 			this.ctx.fillStyle = polys[i].fill();

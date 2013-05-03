@@ -42,10 +42,10 @@ Projection.prototype = {
 		
 		switch (face.facing) {
 			case 'front':
-				points.push(new Vector(entity.x, entity.y, entity.z));
-				points.push(new Vector(entity.x, entity.y, entity.z+entity.h));
-				points.push(new Vector(entity.x+entity.w, entity.y, entity.z+entity.h));
-				points.push(new Vector(entity.x+entity.w, entity.y, entity.z));
+				points.push(new Vector(entity.x, entity.y+entity.l, entity.z));
+				points.push(new Vector(entity.x, entity.y+entity.l, entity.z+entity.h));
+				points.push(new Vector(entity.x+entity.w, entity.y+entity.l, entity.z+entity.h));
+				points.push(new Vector(entity.x+entity.w, entity.y+entity.l, entity.z));
 				break;
 			case 'left':
 				points.push(new Vector(entity.x+entity.w, entity.y, entity.z));
@@ -60,10 +60,10 @@ Projection.prototype = {
 				points.push(new Vector(entity.x, entity.y+entity.l, entity.z));
 				break;
 			case 'back':
-				points.push(new Vector(entity.x, entity.y+entity.l, entity.z));
-				points.push(new Vector(entity.x, entity.y+entity.l, entity.z+entity.h));
-				points.push(new Vector(entity.x+entity.w, entity.y+entity.l, entity.z+entity.h));
-				points.push(new Vector(entity.x+entity.w, entity.y+entity.l, entity.z));
+				points.push(new Vector(entity.x, entity.y, entity.z));
+				points.push(new Vector(entity.x, entity.y, entity.z+entity.h));
+				points.push(new Vector(entity.x+entity.w, entity.y, entity.z+entity.h));
+				points.push(new Vector(entity.x+entity.w, entity.y, entity.z));
 				break;
 			case 'top':
 				points.push(new Vector(entity.x, entity.y, entity.z+entity.h));
