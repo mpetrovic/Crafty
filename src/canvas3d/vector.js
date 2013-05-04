@@ -15,6 +15,12 @@ Vector.prototype = {
 			this.z = z;
 	},
 	
+	add: function (v) {
+		if (!(v instanceof Vector)) throw 'Exception: Invalid argument';
+		
+		return new Vector(this.x + v.x, this.y + v.y, this.z + v.z);
+	},
+	
 	sub: function (v) {
 		if (!(v instanceof Vector)) throw 'Exception: Invalid argument';
 		
