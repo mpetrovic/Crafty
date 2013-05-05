@@ -372,8 +372,6 @@ ZBuffer.prototype = {
 				x: Crafty.viewport.width/2,
 				y: Crafty.viewport.height/2 >> 0
 			};
-		
-		console.log(polys);
 
 		for (;x<Crafty.viewport.width;x++) {
 			for (y=0;y<Crafty.viewport.height;y++) {
@@ -392,7 +390,6 @@ ZBuffer.prototype = {
 				}
 			}
 		}
-		console.log(buffer);
 	},
 	
 	getRGBFromColor: function (color) {
@@ -495,7 +492,6 @@ Crafty.camera.modes.canvas3d = {
 				break;
 			case 'bbuffer':
 				//painter = new BBuffer(this);
-				break;
 			case 'painter':
 			default:
 				painter = new Painter(this);
