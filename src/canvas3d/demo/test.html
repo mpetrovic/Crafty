@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>3D Canvas Test Suite</title>
+	<script type="text/javascript" src="crafty.js"></script>
+	<script type="text/javascript" src="canvas3d.js"></script>
+	<script type="text/javascript">
+		window.onload = function () {
+			Crafty.init();
+			Crafty.camera.cameras['default'].active = false;
+			Crafty.camera('canvas3d', 'canvas3d', {canvas: true});
+			Crafty.camera.cameras['canvas3d'].move(-400, 400, 400)//.composite = 'zbuffer';
+			
+			var ent1 = Crafty.e('Spatial, Color').attr({w: 100, l: 100, h: 100, x: -50, y: -50, z: 0}).color('red');
+			var ent2 = Crafty.e('Spatial, Color').attr({w: 50, l: 50, h: 50, x: 75, y: 75, z: 0}).color('blue');
+		}
+	</script>
+</head>
+<body>
+</body>
+</html>
