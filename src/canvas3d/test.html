@@ -9,9 +9,10 @@
 			Crafty.init();
 			Crafty.camera.cameras['default'].active = false;
 			Crafty.camera('canvas3d', 'canvas3d', {canvas: true});
-			Crafty.camera.cameras['canvas3d'].move(-400, -400, 400).composite = 'zbuffer';
+			Crafty.camera.cameras['canvas3d'].move(400, 400, 40).composite = 'zbuffer';
 			
-			var ent1 = Crafty.e('Spatial, Color').attr({w: 100, l: 100, h: 100, x: -50, y: -50, z: -50}).color('red');
+			var ent1 = Crafty.e('Spatial, Color').attr({w: 100, l: 100, h: 100, x: -50, y: -50, z: 0}).color('red');
+			var ent2 = Crafty.e('Spatial, Color').attr({w: 50, l: 50, h: 50, x: 75, y: 75, z: 0}).color('blue');
 		}
 	</script>
 </head>

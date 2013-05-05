@@ -65,7 +65,7 @@ ZBuffer.prototype = {
 					if (isInside) {
 						var depth = this.getDepth(vert.x, vert.y, polys[i]),
 							key = x+'-'+y;
-						if ((typeof buffer[key] == 'number' && buffer[key] < depth) 
+						if ((typeof buffer[key] == 'number' && buffer[key] > depth) 
 							|| typeof buffer[key] == 'undefined') {
 							buffer[key] = depth;
 							this.drawPixel(x, y, polys[i]);
@@ -74,6 +74,7 @@ ZBuffer.prototype = {
 				}
 			}
 		}
+		console.log(buffer);
 	},
 	
 	getRGBFromColor: function (color) {
