@@ -28,6 +28,7 @@
 		'polygon',
 		'projection',
 		'painter',
+		'zbuffer',
 		'execute',
 		'outro'
 	],

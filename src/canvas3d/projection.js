@@ -17,12 +17,11 @@ Projection.prototype = {
 			};
 		
 		this.ang = ang;
-		console.log({x: Crafty.math.radToDeg(ang.x), z: Crafty.math.radToDeg(ang.z)});
 	},
 	
 	// taken from http://en.wikipedia.org/wiki/3D_projection#Perspective_projection
 	// translates a 3d vertex into a 2d vertex
-	transform: function (vector) {
+	transform: function transform (vector) {
 		var cos = Math.cos, sin = Math.sin,
 			t_vect = new Vector(vector.x, vector.y, vector.z),
 			d_vect = t_vect.sub(this.c_vect),
@@ -39,23 +38,20 @@ Projection.prototype = {
 				x: d_vex.x * (r_dim.z / d_vex.z),
 				y: d_vex.y * (r_dim.z / d_vex.z)
 			};
-		console.log(d_vect);
-		console.log(d_vex);
-		console.log(r_vex);
 			
 			
-		return new Vertex(r_vex.x >> 0, r_vex.y >> 0);
+		return new Vertex(r_vex.x >> 0, -(r_vex.y >> 0), d_vex.z);
 	},
 	
-	transformFace: function (face, entity) {
+	transformFace: function transformFace (face, entity) {
 		var points = [];
 		
 		switch (face.facing) {
 			case 'front':
-				points.push(new Vector(entity.x, entity.y+entity.l, entity.z));
-				points.push(new Vector(entity.x, entity.y+entity.l, entity.z+entity.h));
-				points.push(new Vector(entity.x+entity.w, entity.y+entity.l, entity.z+entity.h));
 				points.push(new Vector(entity.x+entity.w, entity.y+entity.l, entity.z));
+				points.push(new Vector(entity.x+entity.w, entity.y+entity.l, entity.z+entity.h));
+				points.push(new Vector(entity.x, entity.y+entity.l, entity.z+entity.h));
+				points.push(new Vector(entity.x, entity.y+entity.l, entity.z));
 				break;
 			case 'left':
 				points.push(new Vector(entity.x+entity.w, entity.y, entity.z));
@@ -64,10 +60,10 @@ Projection.prototype = {
 				points.push(new Vector(entity.x+entity.w, entity.y+entity.l, entity.z));
 				break;
 			case 'right':
-				points.push(new Vector(entity.x, entity.y, entity.z));
-				points.push(new Vector(entity.x, entity.y, entity.z+entity.h));
-				points.push(new Vector(entity.x, entity.y+entity.l, entity.z+entity.h));
 				points.push(new Vector(entity.x, entity.y+entity.l, entity.z));
+				points.push(new Vector(entity.x, entity.y+entity.l, entity.z+entity.h));
+				points.push(new Vector(entity.x, entity.y, entity.z+entity.h));
+				points.push(new Vector(entity.x, entity.y, entity.z));
 				break;
 			case 'back':
 				points.push(new Vector(entity.x, entity.y, entity.z));
@@ -76,10 +72,10 @@ Projection.prototype = {
 				points.push(new Vector(entity.x+entity.w, entity.y, entity.z));
 				break;
 			case 'top':
-				points.push(new Vector(entity.x, entity.y, entity.z+entity.h));
-				points.push(new Vector(entity.x+entity.w, entity.y, entity.z+entity.h));
-				points.push(new Vector(entity.x+entity.w, entity.y+entity.l, entity.z+entity.h));
 				points.push(new Vector(entity.x, entity.y+entity.l, entity.z+entity.h));
+				points.push(new Vector(entity.x+entity.w, entity.y+entity.l, entity.z+entity.h));
+				points.push(new Vector(entity.x+entity.w, entity.y, entity.z+entity.h));
+				points.push(new Vector(entity.x, entity.y, entity.z+entity.h));
 				break;
 			case 'below':
 				points.push(new Vector(entity.x, entity.y, entity.z));

@@ -1,22 +1,20 @@
 /**
  * Defines a vertex in a 2D polygon
  */
-function Vertex(x, y) {
+function Vertex(x, y, depth) {
 	this.x = x;
 	this.y = y;
-	
-	this.edges = [];
+	this.depth = depth;
 }
 
 Vertex.prototype = {
-	set: function (x, y) {
+	set: function (x, y, depth) {
 		if (typeof x == 'number')
 			this.x = x;
 		if (typeof y == 'number')
 			this.y = y;
+		if (typeof depth == 'number') {
+			this.depth = depth;
+		}
 	},
-	
-	addEdge: function (ed) {
-		if (!(ed instanceof Edge)) throw 'Exception: Invalid argument';
-	}
 }
